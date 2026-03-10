@@ -8,7 +8,7 @@ A streamlit-based hotel management system designed to streamline hotel operation
 
 ## Features
 
-- **Check-In Management** — Register guests with name, email, phone, room type (Single/Double/Suite), and check-in/check-out dates.
+- **Check-In Management** — Register guests with name, email, phone, room type (Single/Double/Suite), total family members, and check-in/check-out dates.
 - **Check-Out Management** — Check out guests by name, updating their status in the system.
 - **View All Data** — Display all guest records in a tabular format.
 - **Guest Search** — Search guests by name, email, or phone number.
@@ -43,7 +43,7 @@ A streamlit-based hotel management system designed to streamline hotel operation
 
 3. Install dependencies:
    ```bash
-   pip install streamlit pandas os
+   pip install streamlit pandas
    ```
 
 ### Running the App
@@ -60,6 +60,7 @@ The app will open in your browser. A `Rooms.csv` file is automatically created o
 Hotel-Management-System/
 ├── main.py        # Main Streamlit application
 ├── Rooms.csv      # Guest data storage (auto-generated)
+├── tips.txt       # Development notes and TODOs
 ├── LICENSE         # MIT License
 └── README.md       # Project documentation
 ```
