@@ -43,7 +43,7 @@ A streamlit-based hotel management system designed to streamline hotel operation
 
 3. Install dependencies:
    ```bash
-   pip install streamlit pandas
+   pip install streamlit pandas os
    ```
 
 ### Running the App
