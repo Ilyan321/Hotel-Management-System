@@ -1,5 +1,2 @@
-Name,Email,Phone,Room Type,Check In Date,Check Out Date,Check In Status
-,,,Single,2026-03-10,2026-03-10,True
-Tayaba,,123.0,Single,2026-03-10,2026-03-10,False
-Ilyan,ilyaankhan342@gmail.com,3213379342.0,Suite,2026-03-10,2026-03-11,False
-Ilyan,ilyaankhan342@gmail.com,3213379342.0,Single,2026-03-10,2026-03-11,False
+Name,Email,Phone,Room Type,Check In Date,Total Family Members,Check Out Date,Check In Status
+Ilyan,ilyaankhan342@gmail.com,03213379342,Single,2026-03-11,1,2026-03-11,True

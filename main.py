@@ -4,7 +4,7 @@ import os
 
 # check if file exists if not create it
 if not os.path.exists("Rooms.csv"):
-    df=pd.DataFrame(columns=["Name","Email","Phone","Room Type","Check In Date","Check Out Date","Check In Status"])
+    df=pd.DataFrame(columns=["Name","Email","Phone","Room Type","Check In Date","Total Family Members","Check Out Date","Check In Status"])
     df.to_csv("Rooms.csv",index=False)  
 
 Room=pd.read_csv("Rooms.csv")
@@ -49,30 +49,6 @@ st.write(" ")
 st.write("")
 st.write(" ")
 
-st.header("Additional Services")
-col_kitchen,col_laundry=st.columns(2)
-with col_kitchen:
-    with st.container(border=True,height=170):
-        st.subheader("Kitchen Management")
-        st.write("Efficiently manage kitchen operations, track inventory, and ensure timely meal preparation to enhance guest satisfaction.")
-
-with col_laundry:
-    with st.container(border=True,height=170):
-        st.subheader("Laundry Management")
-        st.write("Streamline laundry processes, track linen inventory, and ensure timely service to maintain high standards of cleanliness and guest comfort.")
-
-col_gym,col_pool=st.columns(2)
-
-with col_gym:
-    with st.container(border=True,height=170):
-        st.subheader("Gym Management")
-        st.write("Effectively manage gym facilities, track equipment usage, and provide a seamless experience for fitness-conscious guests.")
-
-with col_pool:
-    with st.container(border=True,height=170):
-        st.subheader("Pool Management")
-        st.write("Optimize pool operations, monitor water quality, and ensure a safe and enjoyable experience for guests seeking relaxation and recreation.")
-
 #Check In form
 with col1:
     CheckIn = st.button("Check In",use_container_width=True)
@@ -80,6 +56,32 @@ with col1:
         st.session_state.show_check_in_form = True
         st.session_state.view_data=False
         st.session_state.show_check_out_form=False
+
+#check In form Data ----- can be put anywhere
+if st.session_state.show_check_in_form:
+        with  st.form("Check In Form"):
+            # take input from user
+            st.subheader("Check In Form")
+            name = st.text_input("Name")
+            email = st.text_input("Email")
+            phone = st.text_input("Phone")
+            room_type = st.selectbox("Room Type",["Single","Double","Suite"])
+            total_family_members = st.number_input("Total Family Members",min_value=1)
+            check_in_date = st.date_input("Check In Date")
+            check_out_date = st.date_input("Check Out Date")
+            Checkinstatus = True
+            st.markdown("### Check In Status: :green[Checking In]")
+            
+
+            submit= st.form_submit_button("Submit")
+            if submit:
+                data={"Name":name,"Email":email,"Phone":phone,"Room Type":room_type,"Check In Date":check_in_date,"Total Family Members":total_family_members,"Check Out Date":check_out_date,"Check In Status":Checkinstatus}
+                df=pd.DataFrame(data,index=[0])
+                df.to_csv("Rooms.csv",mode="a",index=False,header=False)
+
+                st.session_state.show_check_in_form = False
+                st.session_state.toast_message = "Tourist Successfully Checked In."
+                st.rerun()
 
 
 with col2:
@@ -90,6 +92,27 @@ with col2:
         st.session_state.show_check_in_form = False
         st.session_state.Search=False
 
+# # Check out form data
+
+if st.session_state.show_check_out_form:
+    with st.form("Check Out Form"):
+        st.subheader("Check Out Form")
+        name=st.text_input("Enter Name to Check Out")
+        submit = st.form_submit_button("Submit")
+        if submit:
+            if name:
+                Room = pd.read_csv("Rooms.csv")
+                if name in Room["Name"].values:
+                    Room.loc[Room["Name"] == name, "Check In Status"]=False
+                    Room.to_csv("Rooms.csv",index=False)
+                    st.session_state.show_check_out_form=False
+                    st.session_state.toast_message = "Tourist Successfully checked Out."
+                    st.rerun()
+                else:
+                    st.error("No guest found with the provided name.")
+            else:
+                st.error("Please enter a name.")
+
 
 # View all data
 with col3:
@@ -99,6 +122,13 @@ if view:
     st.session_state.show_check_out_form=False
     st.session_state.view_data=True
     st.session_state.Search=False
+
+
+# Data viewing session code
+if st.session_state.view_data:
+    st.subheader("All Guests and Tourists.")
+    st.dataframe(Room)
+
 
 
 
@@ -128,60 +158,30 @@ if st.session_state.Search:
             st.error("No results found.")
 
 
-# Data viewing session code
-if st.session_state.view_data:
-    st.subheader("All Guests and Tourists.")
-    st.dataframe(Room)
 
+st.header("Additional Services")
+col_kitchen,col_laundry=st.columns(2)
+with col_kitchen:
+    with st.container(border=True,height=170):
+        st.subheader("Kitchen Management")
+        st.write("Efficiently manage kitchen operations, track inventory, and ensure timely meal preparation to enhance guest satisfaction.")
 
-#check In form Data ----- can be put anywhere
-if st.session_state.show_check_in_form:
-        with  st.form("Check In Form"):
-            # take input from user
-            st.subheader("Check In Form")
-            name = st.text_input("Name")
-            email = st.text_input("Email")
-            phone = st.text_input("Phone")
-            room_type = st.selectbox("Room Type",["Single","Double","Suite"])
-            check_in_date = st.date_input("Check In Date")
-            check_out_date = st.date_input("Check Out Date")
-            Checkinstatus = True
-            st.markdown("### Check In Status: :green[Checking In]")
-            
+with col_laundry:
+    with st.container(border=True,height=170):
+        st.subheader("Laundry Management")
+        st.write("Streamline laundry processes, track linen inventory, and ensure timely service to maintain high standards of cleanliness and guest comfort.")
 
-            submit= st.form_submit_button("Submit")
-            if submit:
-                data={"Name":name,"Email":email,"Phone":phone,"Room Type":room_type,"Check In Date":check_in_date,"Check Out Date":check_out_date,"Check In Status":Checkinstatus}
-                df=pd.DataFrame(data,index=[0])
-                df.to_csv("Rooms.csv",mode="a",index=False,header=False)
+col_gym,col_pool=st.columns(2)
 
-                st.session_state.show_check_in_form = False
-                st.session_state.toast_message = "Tourist Successfully Checked In."
-                st.rerun()
+with col_gym:
+    with st.container(border=True,height=170):
+        st.subheader("Gym Management")
+        st.write("Effectively manage gym facilities, track equipment usage, and provide a seamless experience for fitness-conscious guests.")
 
-
-
-# # Check out form data
-
-if st.session_state.show_check_out_form:
-    with st.form("Check Out Form"):
-        st.subheader("Check Out Form")
-        name=st.text_input("Enter Name to Check Out")
-        submit = st.form_submit_button("Submit")
-        if submit:
-            if name:
-                Room = pd.read_csv("Rooms.csv")
-                if name in Room["Name"].values:
-                    Room.loc[Room["Name"] == name, "Check In Status"]=False
-                    Room.to_csv("Rooms.csv",index=False)
-                    st.session_state.show_check_out_form=False
-                    st.session_state.toast_message = "Tourist Successfully checked Out."
-                    st.rerun()
-                else:
-                    st.error("No guest found with the provided name.")
-            else:
-                st.error("Please enter a name.")
-
+with col_pool:
+    with st.container(border=True,height=170):
+        st.subheader("Pool Management")
+        st.write("Optimize pool operations, monitor water quality, and ensure a safe and enjoyable experience for guests seeking relaxation and recreation.")
 
 
 st.divider()
