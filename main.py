@@ -15,6 +15,9 @@ if "show_check_in_form" not in st.session_state:
 if "show_check_out_form" not in st.session_state:
     st.session_state.show_check_out_form = False
 
+if "view_data" not in st.session_state:
+    st.session_state.view_data=False
+
 if "toast_message" not in st.session_state:
     st.session_state.toast_message = None
 
@@ -39,10 +42,32 @@ with col1:
     CheckIn = st.button("Check In",use_container_width=True)
     if CheckIn:
         st.session_state.show_check_in_form = True
+        st.session_state.view_data=False
+        st.session_state.show_check_out_form=False
+
+
 with col2:
     CheckOut = st.button("Check Out",use_container_width=True)
     if CheckOut:
         st.session_state.show_check_out_form = True
+        st.session_state.view_data=False
+        st.session_state.show_check_in_form = False
+
+# View all data
+with col3:
+    view = st.button("View All Data",use_container_width=True)
+if view:
+    st.session_state.show_check_in_form=False
+    st.session_state.show_check_out_form=False
+    st.session_state.view_data=True
+
+
+
+
+# Data viewing session code
+if st.session_state.view_data:
+    st.subheader("All Guests and Tourists.")
+    st.dataframe(Room)
 
 
 
@@ -80,12 +105,7 @@ if st.session_state.show_check_in_form:
 # if st.session_state.show_form:
 
 
-# View all data
-with col3:
-    view = st.button("View All Data",use_container_width=True)
-if view:
-    st.subheader("All Guests and Tourists.")
-    st.dataframe(Room)
+
 
 
 # how to do that when anyothr button is pushed the alrady one auto disappears
