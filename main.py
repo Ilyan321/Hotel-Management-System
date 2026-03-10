@@ -149,7 +149,6 @@ if st.session_state.show_check_in_form:
             st.markdown("### Check In Status: :green[Checking In]")
             
 
-            st.write("Data saved to database.")
             submit= st.form_submit_button("Submit")
             if submit:
                 data={"Name":name,"Email":email,"Phone":phone,"Room Type":room_type,"Check In Date":check_in_date,"Check Out Date":check_out_date,"Check In Status":Checkinstatus}
